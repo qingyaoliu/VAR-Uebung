@@ -1,0 +1,35 @@
+package monteCarlo.server;
+
+import java.rmi.registry.*;
+
+import javax.naming.*;
+
+public class MonteCarloServerStartup {
+	
+	public static void main(String[] args){
+		
+		if(System.getSecurityManager() == null){
+			System.setSecurityManager(new SecurityManager());
+			System.out.println("Der Security Manager wurde erfolgreich konfiguriert");
+		}
+		
+		try {
+			LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
+		}
+		catch(Exception e) {
+			System.err.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+		 	
+		String name = "BerechnePi";
+		try {
+			MonteCarloServer monteCarloServer = new MonteCarloServer();
+			new InitialContext().rebind(name, monteCarloServer);
+			System.out.println("MonteCarloServer (re)bound");
+		}
+		catch(Exception e) {
+			System.err.println("MonteCarloServer exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+}

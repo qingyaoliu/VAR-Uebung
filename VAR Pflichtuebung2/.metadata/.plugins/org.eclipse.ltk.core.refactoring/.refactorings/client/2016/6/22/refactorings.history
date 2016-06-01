@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;genauigkeit&apos; in &apos;monteCarlo.client.MonteCarloClient.main(...)&apos; to &apos;tropfen&apos;&#x0D;&#x0A;- Original project: &apos;client&apos;&#x0D;&#x0A;- Original element: &apos;monteCarlo.client.MonteCarloClient.main(String[]).genauigkeit&apos;&#x0D;&#x0A;- Renamed element: &apos;genauigkeit&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;genauigkeit&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;monteCarlo.client{MonteCarloClient.java[MonteCarloClient~main~\[QString;@genauigkeit!291!316!296!306!J!0!false" name="tropfen" references="true" stamp="1464797094526" version="1.0"/>
+</session>

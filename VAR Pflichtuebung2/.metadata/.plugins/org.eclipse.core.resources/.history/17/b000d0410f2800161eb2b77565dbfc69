@@ -1,0 +1,31 @@
+import java.rmi.*;
+import java.rmi.registry.*;
+
+public class ComputePiServerStartup  {
+
+    public static void main(String[] args) throws RemoteException {
+
+        if (System.getSecurityManager() == null) {
+            System.setSecurityManager(new SecurityManager());
+        }
+
+        String name = "//" + args[0] + "/ComputePiRemote";
+
+        try {
+
+            try {
+                LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
+            } catch (Exception e) {
+                System.out.println("Could not create RMIRegistry");
+            }
+
+            ComputePiServer computePiServer = new ComputePiServer();
+            Naming.rebind(name, computePiServer);
+            System.out.println("ComputePiServer (re)bound");
+        }
+        catch (Exception e){
+            System.err.println("ComputePiServer exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+}

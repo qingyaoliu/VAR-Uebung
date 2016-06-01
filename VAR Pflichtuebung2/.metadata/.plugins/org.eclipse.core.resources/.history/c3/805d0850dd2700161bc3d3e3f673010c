@@ -1,0 +1,46 @@
+package monteCarlo.client;
+
+import java.math.*;
+import java.net.InetAddress;
+import java.rmi.Naming;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+
+import monteCarlo.server.MonteCarloRemote;
+
+public class MonteCarloClient {
+
+	public static void main(String[] args) {
+
+		long genauigkeit = 1000;
+		BigDecimal[] punkteImKreis = new BigDecimal[6];
+		BigDecimal punkteInDenKreisen = new BigDecimal(0);
+		double computePi = 0.0;
+		int port = 1099;
+		int round = 1;
+
+		try {
+			do {
+				for (int i = 0; i < punkteImKreis.length; i++) {
+					Registry myregistry = LocateRegistry.getRegistry(InetAddress.getLocalHost().getHostAddress(), port);
+					MonteCarloRemote monteCarloRemote = (MonteCarloRemote) myregistry.lookup("MonteCarloServer");
+					punkteImKreis[i] = monteCarloRemote.zufallszahlen(genauigkeit);
+					port++;
+				}
+				for (BigDecimal p : punkteImKreis) {
+					punkteInDenKreisen = new BigDecimal(punkteInDenKreisen.longValue() + p.longValue());
+				}
+				computePi = punkteInDenKreisen.doubleValue() / punkteImKreis.length;
+				computePi = 4 * computePi / genauigkeit;
+				computePi = Math.round(10000.0 * computePi) / 10000.0;
+				round ++;
+			} while (computePi != 3.1415);
+			
+			System.out.println("Genäherte Kreiszahl Pi: " + computePi);
+			
+		} catch (Exception e) {
+			System.err.println("MonteCarloClient exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+}

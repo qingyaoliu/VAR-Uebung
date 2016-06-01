@@ -1,0 +1,29 @@
+package monteCarlo.server;
+
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.*;
+
+
+public class MonteCarloServerStartup {
+	
+	public static void main(String[] args){
+		
+		if(System.getSecurityManager() == null){
+			System.setSecurityManager(new SecurityManager());
+			System.out.println("Der Security Manager wurde erfolgreich konfiguriert");
+		}
+		int port = 1099;
+		try {
+			for(int i=0; i<7;i++){
+				Registry registry = LocateRegistry.createRegistry(port);
+				registry.rebind("MonteCarloServer", new MonteCarloServer());
+				System.out.println("MonteCarloServer (re)bound on port: " + port);
+				port++;
+			}
+		}
+		catch(Exception e) {
+			System.err.println("MonteCarloServer exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+}

@@ -1,0 +1,40 @@
+package monteCarlo.client;
+
+import java.math.*;
+import java.net.InetAddress;
+import java.rmi.Naming;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+
+import monteCarlo.server.MonteCarloRemote;
+
+public class MonteCarloClient {
+	
+	public static void main(String[] args){
+		
+		long genauigkeit = 1000;
+		long [] punkteImKreis = new long[6];
+		long punkteInDenKreisen = 0;
+		BigDecimal pi;
+		int port = 1099;
+		try {
+			for(int i=0; i<punkteImKreis.length; i++){
+				Registry myregistry = LocateRegistry.getRegistry(InetAddress.getLocalHost().getHostAddress(),port);
+				MonteCarloRemote monteCarloRemote = (MonteCarloRemote) myregistry.lookup("MonteCarloServer");
+				punkteImKreis[i] = monteCarloRemote.zufallszahlen(genauigkeit);
+				port++;
+			}
+			for(long p:punkteImKreis){
+				punkteInDenKreisen += p;
+			}
+			punkteInDenKreisen /= punkteImKreis.length;
+			double computePi = 4* (double)punkteInDenKreisen/genauigkeit;
+			pi = new BigDecimal(computePi);
+			System.out.println("Genäherte Kreiszahl Pi: " + pi);
+		}
+		catch (Exception e){
+			System.err.println("MonteCarloClient exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+}

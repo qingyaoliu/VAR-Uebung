@@ -1,0 +1,31 @@
+import java.math.*;
+import java.rmi.*;
+
+public class ComputePiClient {
+
+    public static void main(String[] args) {
+
+        if (System.getSecurityManager() == null) {
+            System.setSecurityManager(new SecurityManager());
+        }
+
+        for (int i = 0; i < 3 ; i++) {
+
+            try {
+
+                String name = "//" + args[0] + "/ComputePiRemote";
+                ComputePiRemote computePiRemote = (ComputePiRemote) Naming.lookup(name);
+                int shots = Integer.parseInt(args[1]);
+                int hits = computePiRemote.calculateCircleHits(shots);
+                BigDecimal pi = new BigDecimal(4 * (double) hits / shots);
+                System.out.println("hits: " + hits);
+                System.out.println("pi: " + pi);
+                System.out.println("schots: " + shots);
+
+            } catch (Exception e) {
+                System.err.println("ComputePiClient exception: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+}

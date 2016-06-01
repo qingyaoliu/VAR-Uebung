@@ -1,0 +1,26 @@
+package monteCarlo.server;
+import java.math.*;
+import java.rmi.*;
+import java.rmi.server.*;
+
+@SuppressWarnings("serial")
+public class MonteCarloServer extends UnicastRemoteObject implements MonteCarloRemote {
+	
+	protected MonteCarloServer() throws RemoteException {
+		super();
+	}
+	@Override
+	public BigDecimal zufallszahlen(long tropfen)throws RemoteException{
+		long punkteInnerhalbKreis = 0;
+		
+		for(int i=0;i<tropfen;i++){
+			double x = (double) Math.random();
+			double y = (double) Math.random();
+			
+			if(Math.sqrt((x*x)+(y*y))<=1){
+				punkteInnerhalbKreis++;
+			}
+		}
+		return new BigDecimal(punkteInnerhalbKreis);
+	}
+}
