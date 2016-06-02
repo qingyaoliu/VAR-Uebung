@@ -1,0 +1,30 @@
+package monteCarlo.server;
+
+import java.rmi.registry.LocateRegistry;
+
+import javax.naming.InitialContext;
+
+import java.rmi.registry.*;
+
+
+public class MonteCarloServerStartup {
+	
+	public static void main(String[] args){
+		if(System.getSecurityManager() == null){
+			System.setSecurityManager(new SecurityManager());
+		}
+//		int port = 1099;
+		try {
+//			for(int i=0; i<7;i++){
+//				Registry registry = LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
+				new InitialContext().rebind("MonteCarloServer", new MonteCarloServer());
+				System.out.println("MonteCarloServer on port: " + registry.REGISTRY_PORT);
+/*				port++;
+			}*/
+		}
+		catch(Exception e) {
+			System.err.println("MonteCarloServer exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+}

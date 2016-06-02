@@ -11,40 +11,28 @@ import monteCarlo.server.MonteCarloRemote;
 public class MonteCarloClient {
 
 	public static void main(String[] args) {
-
-		long tropfen = 100000;
-		BigDecimal[] punkteImKreis = new BigDecimal[7];
-		BigDecimal punkteInDenKreisen = new BigDecimal(0);
+		long tropfen = 1000000;
+		BigDecimal punkteImKreis = new BigDecimal(0);
 		double computePi = 0.0;
 		int port = 1099;
 		int round = 1;
-		MonteCarloRemote[] monteCarloRemoteArray = new MonteCarloRemote[punkteImKreis.length];
 
 		try {
-
-			for (int i = 0; i < punkteImKreis.length; i++) {
-				Registry myregistry = LocateRegistry.getRegistry(InetAddress.getLocalHost().getHostAddress(), port);
-				MonteCarloRemote monteCarloRemote = (MonteCarloRemote) myregistry.lookup("MonteCarloServer");
-				monteCarloRemoteArray[i] = monteCarloRemote;
-				port++;
-			}
+			// Starte RMIRegistry
+			Registry myregistry = LocateRegistry.getRegistry(InetAddress.getLocalHost().getHostAddress(), port);
+			MonteCarloRemote monteCarloRemote = (MonteCarloRemote) myregistry.lookup("MonteCarloServer");
+			
+			// Berechnung PI und Wiederholung bei geringer Genauigkeit
 			do {
-				for(int i=0; i<monteCarloRemoteArray.length; i++){
-					punkteImKreis[i]= monteCarloRemoteArray[i].zufallszahlen(tropfen);
-				}
-				for (BigDecimal p : punkteImKreis) {
-					punkteInDenKreisen = new BigDecimal(punkteInDenKreisen.longValue() + p.longValue());
-				}
-				computePi = punkteInDenKreisen.doubleValue() / punkteImKreis.length;
+				punkteImKreis = monteCarloRemote.zufallszahlen(tropfen);
+				computePi = punkteImKreis.doubleValue();
 				computePi = 4 * computePi / tropfen;
 				computePi = Math.round(10000.0 * computePi) / 10000.0;
 				System.out.println("Aktuell genäherte Kreiszahl Pi: " + computePi + "   Runde " + round);
 				round++;
-				punkteInDenKreisen = new BigDecimal(0);
+				punkteImKreis = new BigDecimal(0);
 			} while (computePi != 3.1415);
-
-			System.out.println("Genäherte Kreiszahl Pi: " + computePi + "\nErreicht in: " + (round-1) + " Runden");
-
+			System.out.println("Genäherte Kreiszahl Pi: " + computePi + "\nErreicht in: " + (round - 1) + " Runden");
 		} catch (Exception e) {
 			System.err.println("MonteCarloClient exception: " + e.getMessage());
 			e.printStackTrace();

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="java.rmi.Naming"/>
-<fullyQualifiedTypeName name="javax.naming.InitialContext"/>
 <fullyQualifiedTypeName name="java.rmi.registry.LocateRegistry"/>
 <fullyQualifiedTypeName name="java.net.InetAddress"/>
 <fullyQualifiedTypeName name="java.rmi.registry.Registry"/>
@@ -9,5 +8,8 @@
 <fullyQualifiedTypeName name="org.omg.CORBA.PUBLIC_MEMBER"/>
 <fullyQualifiedTypeName name="monteCarlo.client.MonteCarloClient"/>
 <fullyQualifiedTypeName name="monteCarlo.server.MonteCarloRemote"/>
+<fullyQualifiedTypeName name="javax.swing.plaf.synth.Region"/>
 <fullyQualifiedTypeName name="java.math.BigDecimal"/>
+<fullyQualifiedTypeName name="java.lang.SecurityManager"/>
+<fullyQualifiedTypeName name="javax.naming.InitialContext"/>
 </qualifiedTypeNameHistroy>

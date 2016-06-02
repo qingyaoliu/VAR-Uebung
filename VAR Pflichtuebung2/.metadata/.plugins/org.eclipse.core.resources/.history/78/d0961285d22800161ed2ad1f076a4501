@@ -1,0 +1,46 @@
+package monteCarlo.client;
+
+import java.math.*;
+import java.net.InetAddress;
+
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+
+import monteCarlo.server.MonteCarloRemote;
+
+public class MonteCarloClient {
+
+	public static void main(String[] args) {
+		
+		if(System.getSecurityManager()==null){
+			System.setSecurityManager(new SecurityManager());
+		}
+		long tropfen = 1000000;
+		BigDecimal punkteImKreis = new BigDecimal(0);
+		double computePi = 0.0;
+		int port = 1099;
+		int round = 1;
+
+		try {
+			// Starte RMIRegistry
+			Registry myregistry = LocateRegistry.getRegistry(InetAddress.getLocalHost().getHostAddress(), port);
+			MonteCarloRemote monteCarloRemote = (MonteCarloRemote) myregistry.lookup("MonteCarloServer");
+
+			do {
+				punkteImKreis = monteCarloRemote.zufallszahlen(tropfen);
+				computePi = punkteImKreis.doubleValue();
+				computePi = 4 * computePi / tropfen;
+				computePi = Math.round(10000.0 * computePi) / 10000.0;
+				System.out.println("Aktuell genäherte Kreiszahl Pi: " + computePi + "   Runde " + round);
+				round++;
+				punkteImKreis = new BigDecimal(0);
+			} while (computePi != 3.1415);
+
+			System.out.println("Genäherte Kreiszahl Pi: " + computePi + "\nErreicht in: " + (round - 1) + " Runden");
+
+		} catch (Exception e) {
+			System.err.println("MonteCarloClient exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+}

@@ -1,6 +1,5 @@
 package monteCarlo.server;
 
-import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.*;
 
 
@@ -8,14 +7,10 @@ public class MonteCarloServerStartup {
 	
 	public static void main(String[] args){
 		
-		int port = 1099;
 		try {
-			for(int i=0; i<7;i++){
-				Registry registry = LocateRegistry.createRegistry(port);
+				Registry registry = LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
 				registry.rebind("MonteCarloServer", new MonteCarloServer());
-				System.out.println("MonteCarloServer (re)bound on port: " + port);
-				port++;
-			}
+				System.out.println("MonteCarloServer on port: " + Registry.REGISTRY_PORT);
 		}
 		catch(Exception e) {
 			System.err.println("MonteCarloServer exception: " + e.getMessage());
