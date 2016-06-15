@@ -1,0 +1,9 @@
+package client;
+import javax.xml.ws.WebServiceRef;
+
+public class Client {
+	@WebServiceRef(wsdlLocation="http://localhost:8080/Server/Service?wsdl")
+	private static Service service;
+	
+	public static 
+}
