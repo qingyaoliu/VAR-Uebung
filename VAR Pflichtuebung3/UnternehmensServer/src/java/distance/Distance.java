@@ -28,8 +28,56 @@ public class Distance {
      * Web service operation
      */
     @WebMethod(operationName = "distance")
-    public String distance(@WebParam(name = "destination") String destination) {
+    public String distance(@WebParam(name = "Start") String start,@WebParam(name = "Ziel") String ziel) {
         //TODO write your implementation code here:
+        String key = "AIzaSyDp2BjEAljUDLLiYowDUoA8ucd61beBMkM";
+        String origins = "";
+        String destination = "";
+        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?";
+        
+        try{
+            start = start.toLowerCase();
+            ziel = ziel.toLowerCase();
+            switch(start){
+                case "hq":
+                    origins = "Mannheim";
+                    break;
+                case "ob":
+                    origins = "Berlin";
+                    break;
+                case "oh":
+                    origins = "Hamburg";
+                    break;
+                case "om":
+                    origins = "München";
+                    break;
+                default:
+                    break;
+            }
+            switch(ziel){
+                case "hq":
+                    destination = "Mannheim";
+                    break;
+                case "ob":
+                    destination = "Berlin";
+                    break;
+                case "oh":
+                    destination = "Hamburg";
+                    break;
+                case "om":
+                    destination = "München";
+                    break;
+                default:
+                    break;
+            }
+            url = url + "origins=" + origins + "&destination=" + destination + "&mode=driving";
+            
+            
+        } catch(Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        
         return null;
     }
 }
