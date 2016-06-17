@@ -4,7 +4,7 @@
         *** TO CHANGE TARGETS GENERATED TO jaxws-build.xml COPY THOSE             ***
         *** TARGETS TO ../build.xml AND MODIFY THAT FILE INSTEAD                  ***
 
-        --><project xmlns:carproject="http://www.netbeans.org/ns/car-project/1" xmlns:xalan="http://xml.apache.org/xslt" xmlns:jaxws="http://www.netbeans.org/ns/jax-ws/1">
+        --><project xmlns:xalan="http://xml.apache.org/xslt" xmlns:carproject="http://www.netbeans.org/ns/car-project/1" xmlns:jaxws="http://www.netbeans.org/ns/jax-ws/1">
     <!--
                 ===================
                 JAX-WS WSIMPORT SECTION
@@ -20,8 +20,8 @@
     </target>
     <target name="wsimport-client-Distance" depends="wsimport-init">
         <mkdir dir="${build.generated.dir}/jax-wsCache/Distance"/>
-        <property name="wsdl-Distance" location="${meta.inf}/xml-resources/web-service-references/Distance/wsdl/192.168.1.94_8080/UnternehmensServer/Distance.wsdl"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/Distance" destdir="${build.generated.dir}/jax-wsCache/Distance" wsdl="${wsdl-Distance}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://192.168.1.94:8080/UnternehmensServer/Distance?wsdl" xnocompile="true" xendorsed="true" package="unternehmensClient">
+        <property name="wsdl-Distance" location="${meta.inf}/xml-resources/web-service-references/Distance/wsdl/localhost_8080/UnternehmensServer/Distance.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/Distance" destdir="${build.generated.dir}/jax-wsCache/Distance" wsdl="${wsdl-Distance}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8080/UnternehmensServer/Distance?wsdl" xnocompile="true" xendorsed="true">
             <depends file="${wsdl-Distance}"/>
             <produces dir="${build.generated.dir}/jax-wsCache/Distance"/>
         </wsimport>
@@ -33,7 +33,7 @@
     </target>
     <target name="wsimport-client-clean-Distance" depends="-init-project">
         <delete dir="${build.generated.dir}/jax-wsCache/Distance"/>
-        <delete dir="${build.generated.sources.dir}/jax-ws/unternehmensClient"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/distance"/>
     </target>
     <target name="wsimport-client-generate" depends="wsimport-client-Distance"/>
 </project>

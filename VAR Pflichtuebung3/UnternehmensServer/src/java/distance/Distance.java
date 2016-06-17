@@ -5,9 +5,12 @@
  */
 package distance;
 
+import java.net.*;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
+import javax.ws.rs.client.*;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -15,25 +18,19 @@ import javax.jws.WebParam;
  */
 @WebService(serviceName = "Distance")
 public class Distance {
-
-    /**
-     * This is a sample web service operation
-     */
-    @WebMethod(operationName = "hello")
-    public String hello(@WebParam(name = "name") String txt) {
-        return "Hello " + txt + " !";
-    }
-
     /**
      * Web service operation
      */
     @WebMethod(operationName = "distance")
-    public String distance(@WebParam(name = "Start") String start,@WebParam(name = "Ziel") String ziel) {
+    public String distance(@WebParam(name = "start") String start,@WebParam(name = "ziel") String ziel) {
         //TODO write your implementation code here:
+        Client client = ClientBuilder.newClient();
         String key = "AIzaSyDp2BjEAljUDLLiYowDUoA8ucd61beBMkM";
         String origins = "";
         String destination = "";
-        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?";
+        String link = "https://maps.googleapis.com/maps/api/distancematrix/json?";
+        String distance = "";
+        String duration = "";
         
         try{
             start = start.toLowerCase();
@@ -70,14 +67,24 @@ public class Distance {
                 default:
                     break;
             }
-            url = url + "origins=" + origins + "&destination=" + destination + "&mode=driving";
+            link = link + "origins=" + origins + "&destinations=" + destination + "&mode=driving&key=" + key;
+            WebTarget allSlidesTarget = client.target(link);
+            Invocation allSlidesInvocation = allSlidesTarget.request().accept("application/json").buildGet();
+
+            Response response = allSlidesInvocation.invoke();
+            if (response.getStatus() != 200) {
+                throw new RuntimeException("Fehler: HTTP Fehlernummer: " + response.getStatus());
+            }
             
+            String output = response.readEntity(String.class);
+            String result = output.substring(output.indexOf("text")+9,output.indexOf("text")+15);
+         //   return "Entfernung: " + distance + " Fahrzeit: " + duration;
+            
+            return result;
             
         } catch(Exception e) {
             e.printStackTrace();
             return null;
         }
-        
-        return null;
     }
 }
