@@ -5,12 +5,14 @@
  */
 package distance;
 
-import java.net.*;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
-import javax.ws.rs.client.*;
-import javax.ws.rs.core.Response;
+import com.google.gson.*;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  *
@@ -20,45 +22,49 @@ import javax.ws.rs.core.Response;
 public class Distance {
     /**
      * Web service operation
+     * @param start
+     * @param ziel
+     * @return 
      */
     @WebMethod(operationName = "distance")
     public String distance(@WebParam(name = "start") String start,@WebParam(name = "ziel") String ziel) {
         //TODO write your implementation code here:
-        Client client = ClientBuilder.newClient();
+       
         String key = "AIzaSyDp2BjEAljUDLLiYowDUoA8ucd61beBMkM";
         String origins = "";
         String destination = "";
         String link = "https://maps.googleapis.com/maps/api/distancematrix/json?";
         String distance = "";
         String duration = "";
-        
-        try{
-            start = start.toLowerCase();
-            ziel = ziel.toLowerCase();
+        if(start == null || ziel == null){
+            return "start = " + start + " ziel = " + ziel;
+        } else{
+            try{
+            
             switch(start){
-                case "hq":
+                case "HQ":
                     origins = "Mannheim";
                     break;
-                case "ob":
+                case "OB":
                     origins = "Berlin";
                     break;
-                case "oh":
+                case "OH":
                     origins = "Hamburg";
                     break;
-                case "om":
+                case "OM":
                     origins = "München";
                     break;
                 default:
                     break;
             }
             switch(ziel){
-                case "hq":
+                case "HQ":
                     destination = "Mannheim";
                     break;
-                case "ob":
+                case "OB":
                     destination = "Berlin";
                     break;
-                case "oh":
+                case "OH":
                     destination = "Hamburg";
                     break;
                 case "om":
@@ -68,23 +74,33 @@ public class Distance {
                     break;
             }
             link = link + "origins=" + origins + "&destinations=" + destination + "&mode=driving&key=" + key;
-            WebTarget allSlidesTarget = client.target(link);
-            Invocation allSlidesInvocation = allSlidesTarget.request().accept("application/json").buildGet();
-
-            Response response = allSlidesInvocation.invoke();
-            if (response.getStatus() != 200) {
-                throw new RuntimeException("Fehler: HTTP Fehlernummer: " + response.getStatus());
+            
+            URL url = new URL(link);
+            HttpURLConnection request = (HttpURLConnection)url.openConnection();
+            request.connect();
+            
+            JsonParser irg = new JsonParser();
+            
+            JsonElement elem = irg.parse(new InputStreamReader((InputStream)request.getContent()));
+            
+            JsonObject obj = elem.getAsJsonObject()
+                    .get("rows").getAsJsonArray().get(0).getAsJsonObject()
+                    .get("elements").getAsJsonArray().get(0).getAsJsonObject();
+            
+            JsonObject getDistance = obj.get("distance").getAsJsonObject();
+            distance = getDistance.get("text").getAsString();
+            
+            JsonObject getDuration = obj.get("duration").getAsJsonObject();
+            duration = getDuration.get("text").getAsString();
+            
+            return "Entfernung: " + distance + "\n Fahrzeit: " + duration;
+            } catch(Exception e) {
+            System.err.println(e);
+            return "Fehler";
             }
-            
-            String output = response.readEntity(String.class);
-            String result = output.substring(output.indexOf("text")+9,output.indexOf("text")+15);
-         //   return "Entfernung: " + distance + " Fahrzeit: " + duration;
-            
-            return result;
-            
-        } catch(Exception e) {
-            e.printStackTrace();
-            return null;
         }
+        
+            
+        
     }
 }
