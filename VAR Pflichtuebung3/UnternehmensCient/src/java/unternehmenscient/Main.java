@@ -34,7 +34,7 @@ public class Main {
         System.out.println("OH = Hamburg");
         System.out.println("OM = München");
         
-        start = scanner.next();
+        start = scanner.nextLine();
         
         System.out.println("Bitte geben Sie ihren Ziel ein. ");
         System.out.println("Folgende Orte sind verfügbar:");
@@ -42,10 +42,10 @@ public class Main {
         System.out.println("OB = Berlin");
         System.out.println("OH = Hamburg");
         System.out.println("OM = München");
-        ziel = scanner.next();
+        ziel = scanner.nextLine();
         
         try{
-            String result = distance("HQ", "OB");
+            String result = distance(start, ziel);
             System.out.println("Result: " + result);
         } catch(Exception e){
             e.printStackTrace();

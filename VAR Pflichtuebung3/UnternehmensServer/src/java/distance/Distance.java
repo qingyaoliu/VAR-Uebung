@@ -52,7 +52,7 @@ public class Distance {
                     origins = "Hamburg";
                     break;
                 case "OM":
-                    origins = "München";
+                    origins = "Muenchen";
                     break;
                 default:
                     break;
@@ -67,8 +67,8 @@ public class Distance {
                 case "OH":
                     destination = "Hamburg";
                     break;
-                case "om":
-                    destination = "München";
+                case "OM":
+                    destination = "Muenchen";
                     break;
                 default:
                     break;
